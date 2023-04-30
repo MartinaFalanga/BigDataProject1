@@ -5,7 +5,6 @@ Il Progetto può essere suddiviso in quattro fasi:
 2) Creazione del primo Job,
 3) Creazione del secondo Job,
 4) Creazione del terzo Job,
-5) Creazione del quarto Job
 
 Obiettivo: progettare e realizzare in MapReduce, Hive, Spark i tre job.
 
