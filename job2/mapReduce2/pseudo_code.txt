@@ -1,0 +1,36 @@
+mapper.py:
+
+For each line in the input:
+1. Remove leading and trailing whitespaces from the line.
+2. Split the line into columns using a comma as a delimiter.
+3. Try: 
+    3a. Attempt to extract the user ID, helpfulness numerator, and helpfulness denominator from the columns.
+    3b. Calculate the helpfulness score as the ratio of the helpfulness numerator to the helpfulness denominator.
+4. If a ZeroDivisionError or ValueError occurs:
+    4a. skip to the next line.
+5. Emit the user ID and helpfulness score as a key-value pair to the standard output.
+
+
+reducer.py:
+1. Initialize variables to keep track of the current user ID, helpfulness sum, and review count.
+2. Initialize an empty list to store the user IDs and their corresponding average helpfulness scores.
+3. For each line in the input:
+    3a. Remove leading and trailing whitespaces from the line.
+    3b. Split the line into the user ID and helpfulness score using a tab as a delimiter.
+    3c. Attempt to convert the helpfulness score to a float.
+    3d. If a ValueError occurs
+        3d.1. skip to the next line.
+    3e. If the user ID is the same as the current user ID:
+        3e.1. Add the helpfulness score to the current helpfulness sum.
+        3e.2. Increment the review count by 1.
+    3f. If the user ID is different from the current user ID:
+    3g. If the current user ID is not None:
+        3g.1. Calculate the average helpfulness score by dividing the current helpfulness sum by the current review count.
+        3g.2. Append the current user ID and average helpfulness score as a tuple to the user_helpfulness list.
+        3g.3. Update the current user ID, helpfulness sum, and review count with the new values.
+4. If there is still a current user ID:
+    4a. Calculate the average helpfulness score by dividing the current helpfulness sum by the current review count.
+    4a. Append the current user ID and average helpfulness score as a tuple to the user_helpfulness list.
+5. Sort the user_helpfulness list in descending order of average helpfulness score.
+6. For each tuple in the sorted user_helpfulness list:
+    6a. Emit the user ID and average helpfulness score as a tab-separated key-value pair to the standard output.
