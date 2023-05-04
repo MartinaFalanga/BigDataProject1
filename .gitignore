@@ -1,2 +1,9 @@
-dataset/**
+.idea
+
+dataset
 !dataset/.gitkeep
+output
+
+# Hive
+derby.log
+metastore_db/
