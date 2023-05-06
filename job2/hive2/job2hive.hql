@@ -25,5 +25,7 @@ FROM
     reviews
 GROUP BY
     UserId
- ORDER BY
-    Appreciation DESC;
+ORDER BY
+    Appreciation DESC,
+    UserId ASC;
+

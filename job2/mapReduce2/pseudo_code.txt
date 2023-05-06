@@ -12,25 +12,35 @@ For each line in the input:
 
 
 reducer.py:
-1. Initialize variables to keep track of the current user ID, helpfulness sum, and review count.
-2. Initialize an empty list to store the user IDs and their corresponding average helpfulness scores.
+1. Initialize an empty dictionary named "users_helpfulness"
+2. Initialize an empty dictionary named "users_avg_helpfulness"
 3. For each line in the input:
-    3a. Remove leading and trailing whitespaces from the line.
-    3b. Split the line into the user ID and helpfulness score using a tab as a delimiter.
-    3c. Attempt to convert the helpfulness score to a float.
-    3d. If a ValueError occurs
-        3d.1. skip to the next line.
-    3e. If the user ID is the same as the current user ID:
-        3e.1. Add the helpfulness score to the current helpfulness sum.
-        3e.2. Increment the review count by 1.
-    3f. If the user ID is different from the current user ID:
-    3g. If the current user ID is not None:
-        3g.1. Calculate the average helpfulness score by dividing the current helpfulness sum by the current review count.
-        3g.2. Append the current user ID and average helpfulness score as a tuple to the user_helpfulness list.
-        3g.3. Update the current user ID, helpfulness sum, and review count with the new values.
-4. If there is still a current user ID:
-    4a. Calculate the average helpfulness score by dividing the current helpfulness sum by the current review count.
-    4a. Append the current user ID and average helpfulness score as a tuple to the user_helpfulness list.
-5. Sort the user_helpfulness list in descending order of average helpfulness score.
-6. For each tuple in the sorted user_helpfulness list:
-    6a. Emit the user ID and average helpfulness score as a tab-separated key-value pair to the standard output.
+    3a. Remove leading and trailing whitespaces from the line
+    3b. Split the line by tab ('\t') into userId and helpfulness
+    3c. Try to convert helpfulness to a float:
+            3a.1 If userId is not present in users_helpfulness:
+                3a.1.2 Add userId as a key to users_helpfulness
+                       with initial values of sum and count
+            3a.1 Increment the "sum" value of
+                users_helpfulness[userId]  by helpfulness
+            3a.1 Increment the "count" value of
+                 users_helpfulness[userId] by 1
+    3d. If conversion fails, continue to the next line
+
+4. For each userId in users_helpfulness:
+    4a. Try to calculate the average helpfulness:
+        4a.1 If userId is not present in users_avg_helpfulness:
+            4a.1.1 Calculate the average as
+                   users_helpfulness[userId]['sum'] divided by
+                   users_helpfulness[userId]['count']
+            4a.1.2 Add userId as a key to users_avg_helpfulness
+                   with the calculated average value
+    4b. If an error occurs, continue to the next userId
+
+5. Sort the dictionary users_avg_helpfulness based on the "avg"
+   values in descending order and store the
+   result in "sorted_dictionary"
+
+6. For each key-value pair in sorted_dictionary:
+    6.a Print the userId (key) and the average
+         helpfulness (value['avg']) separated by a tab
