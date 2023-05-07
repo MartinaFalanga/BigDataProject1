@@ -1,39 +1,82 @@
 #!/usr/bin/env python3
 import sys
-from collections import Counter, defaultdict
+import re
+from collections import Counter
 
-def top_n_items(dictionary, n):
-    return dict(Counter(dictionary).most_common(n))
+#  dizionario con doppia chiave
+dict_years = {}
+filtered_dict_years_top10 = {}
+output_dict = {}
+sorted_output_dict = {}
 
-def print_result(year, product_reviews, top_words):
-    for product_id, count in product_reviews.items():
-        print(f'{year}\t{product_id}\t{count}\t{top_words[product_id]}')
 
-current_year = None
-product_reviews = Counter()
-top_words = defaultdict(Counter)
+def clean_text(text):
+    cleaned_text = re.sub(r'[^a-zA-Z\s]', '', str(text))
+    return cleaned_text.lower()
 
+
+def sort_word_counts(word_counts):
+    sorted_keys = sorted(word_counts.keys(), key=lambda x: word_counts[x], reverse=True)[:5]
+    sorted_text_counts = {key: word_counts[key] for key in sorted_keys}
+    return sorted_text_counts
+
+
+def transform_dictionary(input_dict):
+    output_dict = {}
+    for year, products in input_dict.items():
+        word_counts = Counter()
+        product_names = list(products.keys())
+        texts = products.values()
+        for text in texts:
+            words = clean_text(text).split()
+            filtered_words = [word for word in words if len(word) >= 4]
+            word_counts.update(filtered_words)
+        output_dict[year] = {
+            'products': product_names,
+            'word_counts': word_counts.most_common(5)
+        }
+    return output_dict
+
+
+# creo un dizionario che ha come chiave l'anno.
 for line in sys.stdin:
-    year, product_id, tokens = line.strip().split('\t')
-    tokens = eval(tokens)
+    year, product_id, text = line.strip().split('\t')
+    try:
+        if year not in dict_years:
+            dict_years[year] = dict()
+        if product_id not in dict_years[year]:
+            dict_years[year][product_id] = set()
+        dict_years[year][product_id].add(text)
+    except ValueError:
+        continue
 
-    if year == current_year:
-        product_reviews[product_id] += 1
-        top_words[product_id].update(tokens)
-    else:
-        if current_year:
-            top_10_products = top_n_items(product_reviews, 10)
-            for product_id in top_10_products.keys():
-                top_words[product_id] = top_n_items(top_words[product_id], 5)
-            print_result(current_year, top_10_products, top_words)
+# ordinamento dei prodotti per anno e filtraggio dei top 10
+for year, product_reviews in dict_years.items():
+    """
+    product_reviews: {
+        1234: [...],
+        3453: [...]
+        
+    }
+    """
+    product_reviews_sorted_list = sorted(product_reviews.items(), key=lambda x: len(x[1]), reverse=True) # [(1234, [...]), (3453, [...])]
+    filtered_dict_years_top10[year] = dict(product_reviews_sorted_list[:10])
 
-        current_year = year
-        product_reviews = Counter({product_id: 1})
-        top_words = defaultdict(Counter)
-        top_words[product_id].update(tokens)
 
-if current_year:
-    top_10_products = top_n_items(product_reviews, 10)
-    for product_id in top_10_products.keys():
-        top_words[product_id] = top_n_items(top_words[product_id], 5)
-    print_result(current_year, top_10_products, top_words)
+output_dict = transform_dictionary(filtered_dict_years_top10)
+
+# # Ordinare le chiavi di output_dict
+# sorted_output_dict = {year: {'products': output_dict[year]['products'],
+#                              'texts': sort_text_keys(output_dict[year]['texts'])}
+#                       for year in output_dict}
+
+for year in output_dict:
+    word_counts_string = ''
+    for word, count in output_dict[year]['word_counts']:
+        word_counts_string = f'{word}: {count}, '
+
+    print('%s\t%s\t%s' % (year, output_dict[year]['products'], str(output_dict[year]['word_counts'])))
+
+
+
+
