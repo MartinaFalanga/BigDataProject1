@@ -8,8 +8,11 @@ Il Progetto può essere suddiviso in quattro fasi:
 
 Obiettivo: progettare e realizzare in MapReduce, Hive, Spark i tre job.
 
-## Pulizia del dataset
+## Pulizia del dataset iniziale e creazione di altri dataset
 Durante la pulizia del dataset c'è stato bisogno di un'analisi del dataset stesso con annessa rimozione di colonne insignificanti le quali contenvano anche valori nulli ed eliminazione dei duplicati.
+Nel secondo script, invece, è stata effettuata una creazione di due dataset con dimensione:
+1)  il doppio delle righe del dataset iniziale con però cambio di id_prodotto.
+2) 3/4 del doppio delle righe del dataset iniziale con però cambio di id_prodotto.
 
 ## Primo Job
 Un job che sia in grado di generare, per ciascun anno, i 10 prodotti che hanno ricevuto il maggior
