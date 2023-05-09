@@ -2,39 +2,37 @@
 """reducer.py"""
 
 import sys
-from collections import defaultdict
+import itertools
 
-# Dizionario per tenere traccia dei prodotti recensiti con score >= 4 per ogni utente
-user_products = defaultdict(set)
+userProducts = {}
+activeUsers = {}
 
-# Leggi i dati in input dal mapper
 for line in sys.stdin:
-    line = line.strip()
-    user_id, product_id = line.split('\t')
-
-    # Aggiungi il prodotto all'elenco dei prodotti recensiti dall'utente
+    userId, productId = line.split("\t")
     try:
-        if user_id not in user_products:
-            user_products[user_id] = set()
-        if user_id in user_products:
-            user_products[user_id].add(product_id)
+        if userId not in userProducts:
+            userProducts[userId] = set()
+        if userId in userProducts:
+            userProducts[userId].add(productId)
     except ValueError:
         pass
+for user in userProducts:
+    if len(userProducts[user]) >= 3:
+        activeUsers[user] = userProducts[user]
 
-# Trovare gli utenti con gusti affini
-affine_groups = defaultdict(set)
+usersList = (tuple(x) for x in itertools.product(tuple(activeUsers.keys()), repeat=2)
+             if hash(x[0]) > hash(x[1]) and len(
+    activeUsers[x[0]].intersection(activeUsers[x[1]])) >= 3)
 
-for user_id, products in user_products.items():
-    for other_user_id, other_products in user_products.items():
-        if user_id != other_user_id:
-            common_products = products.intersection(other_products)
-            if len(common_products) >= 3:
-                # Ordina gli UserId e utilizza una tupla come chiave per evitare duplicati
-                group_key = tuple(sorted((user_id, other_user_id)))
-                affine_groups[group_key] = common_products
+cleanedTuplesList = []
+for element in usersList:
+    common = set(userProducts[element[0]]).intersection(userProducts[element[1]])
+    if len(common) >= 3:
+        t = (element[0], element[1], common)
+        cleanedTuplesList.append(t)
 
-# Stampa i risultati
-for users, shared_products in sorted(affine_groups.items(), key=lambda x: x[0][0]):
-    users_str = ','.join(users)
-    shared_products_str = ','.join(shared_products)
-    print(f"{users_str}\t{shared_products_str}")
+sortedTuplesList = sorted(cleanedTuplesList, key=lambda tup: tup[0])
+for t in sortedTuplesList:
+    print("User1 ID: %s User2 ID: %s Common Products:" % (t[0], t[1]))
+    for commonProduct in t[2]:
+        print("%s:" % commonProduct)
