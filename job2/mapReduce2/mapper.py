@@ -9,9 +9,10 @@ for line in sys.stdin:
         userId = columns[2]
         helpfulness_numerator = columns[3]
         helpfulness_denominator = columns[4]
-        helpfulness = float(helpfulness_numerator) / float(helpfulness_denominator)
+        if helpfulness_denominator != "0":
+            helpfulness = float(helpfulness_numerator) / float(helpfulness_denominator)
+            print('%s\t%f' % (userId, helpfulness))
     except ZeroDivisionError:
         continue
     except ValueError:
         continue
-    print('%s\t%f' % (userId, helpfulness))
