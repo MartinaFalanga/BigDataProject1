@@ -1,0 +1,18 @@
+mapper.py:
+
+Read input from standard input.
+For each line of input:
+1. Remove any leading or trailing white spaces.
+2. Split the line by comma to extract columns.
+3. Try :
+    3a. to extract the product ID, timestamp, and text from the columns.
+    3b. trasform time in unix date and keep year,
+    3c. pass product ID and time and text to reduccer.py.
+
+reducer.py:
+Initialize an empty dictionary called "dict_years" , "filtered_dict_years_top10", "output_dict" and "sorted_output_dict"
+For each line of input:
+1. Remove any leading or trailing white spaces.
+2. Split the line by tab to extract  product ID, year and text.
+3. try:
+    3a. create a dictinary that has a year how key,product like 
