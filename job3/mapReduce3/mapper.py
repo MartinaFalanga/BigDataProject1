@@ -9,7 +9,7 @@ for line in sys.stdin:
     try:
         userId = columns[2]
         productId = columns[1]
-        score = int(columns[6])
+        score = int(columns[5])
         if score >= 4:
             print('%s\t%s' % (userId, productId))
     except ValueError:

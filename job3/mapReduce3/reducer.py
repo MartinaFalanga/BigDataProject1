@@ -8,7 +8,7 @@ userProducts = {}
 activeUsers = {}
 
 for line in sys.stdin:
-    userId, productId = line.split("\t")
+    userId, productId = line.strip().split("\t", 1)
     try:
         if userId not in userProducts:
             userProducts[userId] = set()
@@ -33,6 +33,4 @@ for element in usersList:
 
 sortedTuplesList = sorted(cleanedTuplesList, key=lambda tup: tup[0])
 for t in sortedTuplesList:
-    print("User1 ID: %s User2 ID: %s Common Products:" % (t[0], t[1]))
-    for commonProduct in t[2]:
-        print("%s:" % commonProduct)
+    print("User1 ID: %s User2 ID: %s Common Products: %s" % (t[0], t[1], ', '.join(t[2])))
