@@ -1,0 +1,54 @@
+1) Importa le librerie necessarie
+
+2) Definisci la funzione clean_text:
+   2.1) Rimuovi i caratteri non alfanumerici e converti il testo in minuscolo
+  
+3) Definisci la funzione extract_words:
+   3.1) Dividi il testo in parole, separate da uno spazio
+   3.2) Filtra le parole con almeno 4 caratteri
+  
+4) Crea la configurazione Spark, lo SparkContext e la SparkSession
+
+5) Definisci lo schema per la lettura del dataset, specificando quindi i nomi delle colonne nell'ordine
+
+6) Leggi il dataset usando lo schema definito
+
+7) Converte il campo Time in formato leggibile estrapolando soltanto l'anno
+
+8) Pulisci il campo Text del dataset applicando la funzione clean_text
+
+9) Trasforma il DataFrame in un RDD e applica la funzione extract_words:
+   9.1) Crea un nuovo RDD con tuple (anno, ProductId, parola)
+   
+10) Conta le occorrenze delle parole:
+   10.1) Crea un RDD con tuple ((anno, ProductId, parola), 1)
+   10.2) Riduci le tuple sommando le occorrenze delle parole
+   10.3) Crea un RDD con tuple (anno, ProductId, parola, conteggio)
+   
+11) Trova le prime 5 parole per prodotto per ogni anno:
+   11.1) Crea un RDD con tuple ((anno, ProductId), (parola, conteggio))
+   11.2) Raggruppa le tuple per chiave (anno, ProductId)
+   11.3) Ordina le parole per conteggio in ordine decrescente e prendi le prime 5
+   11.4) Crea un RDD con tuple (anno, ProductId, parole_top5)
+   
+12) Calcola il numero di recensioni per prodotto per ogni anno:
+   12.1) Crea un RDD con tuple ((anno, ProductId), 1)
+   12.2) Riduci le tuple sommando le occorrenze per ogni prodotto
+   12.3) Crea un RDD con tuple (anno, ProductId, conteggio_recensioni)
+   
+13) Trova i primi 10 prodotti per anno in base al numero di recensioni:
+   13.1) Crea un RDD con tuple (anno, (ProductId, conteggiorecensioni)) 
+   13.2) Raggruppa le tuple per chiave (anno) 
+   13.3) Ordina i prodotti per conteggiorecensioni in ordine decrescente e prendi i primi 10
+   13.4) Crea un RDD con tuple (anno, ProductId)
+   
+14) Unisci i risultati dei prodotti e delle parole più frequenti:
+   14.1. Crea una chiave per entrambi gli RDD top_products e top_words utilizzando la coppia (anno, ProductId) come chiave.
+   14.2. Esegui un'operazione join sugli RDD trasformati per unire i risultati in base alla chiave comune (anno, ProductId).
+   14.3. Trasforma l'RDD risultante per avere la struttura (anno, "ProductId [paroletop]"). 
+   14.4. Raggruppa i risultati in base all'anno. 
+   14.5. Unisci i valori (le stringhe "ProductId [paroletop]") all'interno di ogni gruppo in una singola stringa separata da virgole.
+   14.6. Filtra i risultati per rimuovere le righe in cui l'anno è None.
+   14.7. Ordina i risultati in base all'anno.
+   
+15) Salva il risultato finale in un file di testo
