@@ -1,0 +1,22 @@
+1) Importa le librerie necessarie (SparkConf e SparkContext) di PySpark
+
+2) Inizializza la configurazione (SparkConf) e la SparkContext (sc)
+
+3) Leggi il dataset "dataset_clean.csv" utilizzando la SparkContext (sc)
+
+4) Definisci la funzione "extract_fields" per estrarre i campi necessari da ogni riga del dataset
+  4.1) Splitta la riga utilizzando la virgola come separatore
+  4.2) Estrai l'UserId
+  4.3) Specifica i campi HelpfulnessNumerator e HelpfulnessDenominator come numeri float
+  4.4) Se HelpfulnessDenominator è diverso da 0, calcola l'utilità come rapporto tra HelpfulnessNumerator e HelpfulnessDenominator, altrimenti imposta l'utilità a 0
+  4.5) Ritorna una tupla con UserId e una tupla annidata contenente l'utilità e 1 (per il conteggio delle recensioni)
+  
+5) Utilizza la funzione "extractfields" per mappare ogni riga del dataset in una nuova RDD chiamata "userutility"
+
+6) Utilizza la reduceByKey per sommare l'utilità e il conteggio delle recensioni per ogni UserId
+
+7) Calcola la media dell'utilità per ogni utente dividendo la somma delle utilità per il conteggio delle recensioni
+
+8) Ordina gli utenti in base all'apprezzamento (media dell'utilità) in ordine decrescente e, in caso di parità, in ordine alfabetico crescente
+
+9)Salva l'RDD ordinata come file di testo
