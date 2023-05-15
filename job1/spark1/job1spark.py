@@ -25,7 +25,7 @@ def extract_words(text):
 
 
 
-conf = SparkConf().setAppName("Top 10 products per year")
+conf = SparkConf().setAppName("Job1 spark core")
 
 sc = SparkContext(conf=conf)
 
