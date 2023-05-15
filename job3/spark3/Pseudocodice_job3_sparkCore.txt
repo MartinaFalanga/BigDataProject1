@@ -1,0 +1,35 @@
+1) Importa le librerie necessarie 
+
+2) Definisci la regex per dividere le righe del CSV
+
+3) Crea un ArgumentParser per gestire gli argomenti della riga di comando
+
+4) Leggi gli argomenti della riga di comando: inputpath e outputpath
+
+5) Crea una SparkSession
+
+6) Leggi il file di input come un RDD e memorizzalo nella cache
+
+7) Rimuovi l'intestazione del CSV
+
+8) Filtra le recensioni con score >= 4
+
+9) Crea coppie (UserId, ProductId) dall'RDD filtrato
+
+10) Raggruppa le coppie per UserId e converti i ProductId in una lista
+
+11) Filtra gli utenti che hanno recensito almeno 3 prodotti
+
+13) Genera coppie di utenti con gusti affini e calcola i prodotti comuni:
+   13.1) Raccogli l'RDD filteredUsersRDD come dizionario
+   13.2) Utilizza un ciclo annidato per calcolare i prodotti comuni tra le coppie di utenti:
+    i. Inizializza una lista vuota per i risultati: resultList = []
+    ii. Per ogni coppia di utenti (user1, products1) e (user2, products2) in filteredUsersDict.items():
+        1. Controlla se user1 < user2 per evitare duplicati
+        2. Calcola l'insieme dei prodotti comuni tra user1 e user2: commonProducts = set(products1).intersection(products2)
+        3. Se la lunghezza dell'insieme dei prodotti comuni è >= 3:
+            a. Aggiungi la coppia di utenti e i prodotti comuni alla lista dei risultati: resultList.append((user1, user2, commonProducts))
+   
+14) Converte la lista dei risultati in un RDD
+
+15) Salva l'RDD dei risultati come file di testo
