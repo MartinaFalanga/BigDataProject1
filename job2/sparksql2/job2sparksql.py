@@ -35,20 +35,26 @@ data = data.toDF("_c0", "_c1", "_c2", "_c3", "_c4", "_c5", "_c6", "_c7")
 data = data.withColumn("Utility", col("_c3") / col("_c4"))
 
 
+# Crea una vista temporanea per eseguire query SQL
 
-# Calcola l'apprezzamento medio per ogni utente
-
-user_appreciation = data.groupBy("_c2") \
-
-    .agg({"Utility": "avg"}) \
-
-    .withColumnRenamed("avg(Utility)", "AverageAppreciation")
+data.createOrReplaceTempView("reviews")
 
 
 
-# Ordina gli utenti in base all'apprezzamento medio e al nome utente
+# Calcola l'apprezzamento medio per ogni utente e ordina gli utenti in base all'apprezzamento medio e al nome utente
 
-sorted_users = user_appreciation.orderBy(["AverageAppreciation", "_c2"], ascending=[False, True])
+sorted_users = spark.sql("""
+
+    SELECT _c2 as UserId, AVG(Utility) as AverageAppreciation
+
+    FROM reviews
+
+    GROUP BY _c2
+
+    ORDER BY AverageAppreciation DESC, _c2 ASC
+
+""")
+
 
 
 
