@@ -33,7 +33,7 @@ spark = SparkSession \
 
     .builder \
 
-    .appName("Job3 Spark") \
+    .appName("Job3 Spark core") \
 
     .getOrCreate()
 
