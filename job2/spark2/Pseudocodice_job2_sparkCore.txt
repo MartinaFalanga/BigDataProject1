@@ -19,4 +19,4 @@
 
 8) Ordina gli utenti in base all'apprezzamento (media dell'utilità) in ordine decrescente e, in caso di parità, in ordine alfabetico crescente
 
-9)Salva l'RDD ordinata come file di testo
+9) Salva l'RDD ordinata come file di testo
