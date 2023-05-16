@@ -15,27 +15,32 @@ def clean_text(text):
     return cleaned_text.lower()
 
 
-def sort_word_counts(word_counts):
-    sorted_keys = sorted(word_counts.keys(), key=lambda x: word_counts[x], reverse=True)[:5]
-    sorted_text_counts = {key: word_counts[key] for key in sorted_keys}
-    return sorted_text_counts
 
+def sortd_counts_word(words):
+    order_dictionary = sorted(words.items(), key=lambda x: x[1], reverse=True)[:5]
+    return dict(order_dictionary)
 
 def transform_dictionary(input_dict):
     output_dict = {}
-    for year, products in input_dict.items():
-        word_counts = Counter()
-        product_names = list(products.keys())
-        texts = products.values()
-        for text in texts:
-            words = clean_text(text).split()
-            filtered_words = [word for word in words if len(word) >= 4]
-            word_counts.update(filtered_words)
-        output_dict[year] = {
-            'products': product_names,
-            'word_counts': word_counts.most_common(5)
-        }
+    for year, year_dict in input_dict.items():
+        if year not in output_dict:
+            output_dict[year] = {}
+        for product_id, product_reviews in year_dict.items():
+            if product_id not in output_dict[year]:
+                output_dict[year][product_id] = {}
+            counter_word = Counter()
+            for text in product_reviews:
+                text_clean = clean_text(text)
+                words = text_clean.split()
+                counter_word.update(words)
+
+            sorted_word_counts = sortd_counts_word(counter_word)
+            output_dict[year][product_id] = sorted_word_counts
+
     return output_dict
+
+
+
 
 
 # creo un dizionario che ha come chiave l'anno.
@@ -65,17 +70,11 @@ for year, product_reviews in dict_years.items():
 
 output_dict = transform_dictionary(filtered_dict_years_top10)
 
-# # Ordinare le chiavi di output_dict
-# sorted_output_dict = {year: {'products': output_dict[year]['products'],
-#                              'texts': sort_text_keys(output_dict[year]['texts'])}
-#                       for year in output_dict}
+
+
 
 for year in output_dict:
-    word_counts_string = ''
-    for word, count in output_dict[year]['word_counts']:
-        word_counts_string = f'{word}: {count}, '
-
-    print('%s\t%s\t%s' % (year, output_dict[year]['products'], str(output_dict[year]['word_counts'])))
+    print('%s\t%s\n' % (year, output_dict[year]))
 
 
 
