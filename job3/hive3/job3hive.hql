@@ -48,6 +48,7 @@ FROM result;
 
 DROP TABLE IF EXISTS reviews;
 DROP TABLE IF EXISTS couples;
+DROP TABLE IF EXIST similar_couples;
 DROP TABLE IF EXISTS couples_greater;
 DROP TABLE IF EXISTS similar_couples_greater;
 DROP TABLE IF EXISTS result;
