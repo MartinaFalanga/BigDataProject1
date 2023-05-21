@@ -5,19 +5,19 @@ CREATE TABLE reviews (
   helpfulness_numerator INT,
   helpfulness_denominator INT,
   score INT,
-  time INT,
+  timeRew INT,
   text STRING
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 STORED AS TEXTFILE;
-LOAD DATA LOCAL INPATH 'dataset/dataset_doble_dimentional.csv' OVERWRITE INTO TABLE reviews;
+LOAD DATA LOCAL INPATH 'dataset/dataset_clean.csv' OVERWRITE INTO TABLE reviews;
 
 
 CREATE TABLE reviews_year_text AS
 SELECT
-  year(from_unixtime(time)) AS year,
+  year(from_unixtime(timeRew)) AS year,
   product_id,
   text
 FROM
@@ -26,13 +26,13 @@ FROM
 
 CREATE TABLE reviews_year_product_count AS
 SELECT
-  year(from_unixtime(time)) AS year,
+  year(from_unixtime(timeRew)) AS year,
   product_id,
   COUNT(*) AS count_text
 FROM
   reviews
 GROUP BY
-  year(from_unixtime(time)),
+  year(from_unixtime(timeRew)),
   product_id
 ORDER BY
   year,
@@ -100,3 +100,13 @@ FROM (
 GROUP BY year;
 
 
+
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS reviews_year_text;
+DROP TABLE IF EXISTS reviews_year_product_count;
+DROP TABLE IF EXISTS top_10_products_per_year;
+DROP TABLE IF EXISTS table_year_products_word;
+DROP TABLE IF EXISTS top_10_products_year_word;
+DROP TABLE IF EXISTS top_10_products_year_word_count;
+DROP TABLE IF EXISTS top_10_products_year_word_count_order;
+DROP TABLE IF EXISTS final_table;

@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS reviews (
-    Id int,
-    ProductId string,
-    UserId string,
-    HelpfullnessNumerator int,
-    HelpfullnessDenominator int,
-    Score int,
-    Time BIGINT,
-    Text string
+    id int,
+    productId string,
+    userId string,
+    helpfullnessNumerator int,
+    helpfullnessDenominator int,
+    score int,
+    timeRew BIGINT,
+    text string
 )
 COMMENT 'Reviews Table'
 ROW FORMAT DELIMITED
@@ -15,9 +15,9 @@ FIELDS TERMINATED BY ',';
 LOAD DATA LOCAL INPATH 'dataset/dataset_doble_dimentional.csv' overwrite INTO TABLE reviews;
 
 CREATE TABLE couples AS
-SELECT l.UserId as LeftUser, l.ProductId, r.UserId as RightUser, l.Score as LeftScore, r.Score as RightScore
+SELECT l.userId as LeftUser, l.productId, r.userId as RightUser, l.score as LeftScore, r.score as RightScore
 FROM reviews l JOIN reviews r
-ON l.ProductId = r.ProductId WHERE l.UserId < r.UserId;
+ON l.productId = r.productId WHERE l.userId < r.userId;
 
 CREATE TABLE couples_greater AS
 SELECT *
@@ -34,7 +34,7 @@ FROM similar_couples
 WHERE repetitions >= 3;
 
 CREATE TABLE result as
-SELECT c.LeftUser, ProductId, c.RightUser, LeftScore, RightScore
+SELECT c.LeftUser, productId, c.RightUser, LeftScore, RightScore
 FROM couples_greater c
 where exists (select s.LeftUser, s.RightUser 
               from similar_couples_greater s
@@ -45,4 +45,12 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT *
 FROM result;
+
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS couples;
+DROP TABLE IF EXISTS couples_greater;
+DROP TABLE IF EXISTS similar_couples_greater;
+DROP TABLE IF EXISTS result;
+
+
 

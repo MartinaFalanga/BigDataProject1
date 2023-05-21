@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS reviews (
-    Id INT,
-    ProductId STRING,
-    UserId STRING,
-    HelpfulnessNumerator INT,
-    HelpfulnessDenominator INT,
-    Score INT,
-    Time BIGINT,
-    Text STRING
+    id INT,
+    productId STRING,
+    userId STRING,
+    helpfulnessNumerator INT,
+    helpfulnessDenominator INT,
+    score INT,
+    timeRew BIGINT,
+    text STRING
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
@@ -19,13 +19,14 @@ INSERT OVERWRITE LOCAL DIRECTORY 'output'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 SELECT
-    UserId,
-    AVG(HelpfulnessNumerator / HelpfulnessDenominator) AS Appreciation
+    userId,
+    AVG(helpfulnessNumerator / helpfulnessDenominator) AS appreciation
 FROM
     reviews
 GROUP BY
-    UserId
+    userId
 ORDER BY
-    Appreciation DESC,
-    UserId ASC;
+    appreciation DESC,
+    userId ASC;
 
+DROP TABLE IF EXISTS reviews;
