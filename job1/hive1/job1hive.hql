@@ -1,6 +1,3 @@
-CREATE DATABASE job1;
-USE job1;
-
 CREATE TABLE reviews (
   id STRING,
   product_id STRING,
@@ -15,7 +12,7 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
 LINES TERMINATED BY '\n'
 STORED AS TEXTFILE;
-LOAD DATA LOCAL INPATH 'dataset/dataset_clean.csv' OVERWRITE INTO TABLE reviews;
+LOAD DATA LOCAL INPATH 'dataset/dataset_doble_dimentional.csv' OVERWRITE INTO TABLE reviews;
 
 
 CREATE TABLE reviews_year_text AS
@@ -102,5 +99,4 @@ FROM (
 ) subquery
 GROUP BY year;
 
-DROP DATABASE job1;
 
