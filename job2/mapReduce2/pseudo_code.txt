@@ -1,46 +1,46 @@
 mapper.py:
 
-For each line in the input:
-1. Remove leading and trailing whitespaces from the line.
-2. Split the line into columns using a comma as a delimiter.
-3. Try: 
-    3a. Attempt to extract the user ID, helpfulness numerator, and helpfulness denominator from the columns.
-    3b. Calculate the helpfulness score as the ratio of the helpfulness numerator to the helpfulness denominator.
-4. If a ZeroDivisionError or ValueError occurs:
-    4a. skip to the next line.
-5. Emit the user ID and helpfulness score as a key-value pair to the standard output.
+1) Importa le librerie necessarie (sys)
+
+2) Per ogni riga in input:
+    2.1) Rimuovi gli spazi iniziali e finali dalla riga
+    2.2) Dividi la riga in colonne utilizzando la virgola come separatore
+    2.3) Prova:
+    2.4) Assegna a userId il vlaore della terza colonna
+    2.5) Assegna a helpfulness_numerator il vlaore della quarta colonna
+    2.6) Assegna a helpfulness_denominator il vlaore della quinta colonna
+    2.7) Se helpfulness_denominator è diverso da "0":
+        2.7.1) Calcola helpfulness come il rapporto tra helpfulness_numerator e helpfulness_denominator
+        2.7.2) Stampa "%s\t%f" formattando userId e helpfulness
+    2.8) Cattura l'eccezione ZeroDivisionError e continua con il prossimo ciclo
+    2.9) Cattura l'eccezione ValueError e continua con il prossimo ciclo
 
 
-reducer.py:
-1. Initialize an empty dictionary named "users_helpfulness"
-2. Initialize an empty dictionary named "users_avg_helpfulness"
-3. For each line in the input:
-    3a. Remove leading and trailing whitespaces from the line
-    3b. Split the line by tab ('\t') into userId and helpfulness
-    3c. Try to convert helpfulness to a float:
-            3a.1 If userId is not present in users_helpfulness:
-                3a.1.2 Add userId as a key to users_helpfulness
-                       with initial values of sum and count
-            3a.1 Increment the "sum" value of
-                users_helpfulness[userId]  by helpfulness
-            3a.1 Increment the "count" value of
-                 users_helpfulness[userId] by 1
-    3d. If conversion fails, continue to the next line
+Reducer.py:
 
-4. For each userId in users_helpfulness:
-    4a. Try to calculate the average helpfulness:
-        4a.1 If userId is not present in users_avg_helpfulness:
-            4a.1.1 Calculate the average as
-                   users_helpfulness[userId]['sum'] divided by
-                   users_helpfulness[userId]['count']
-            4a.1.2 Add userId as a key to users_avg_helpfulness
-                   with the calculated average value
-    4b. If an error occurs, continue to the next userId
+1) Importa le librerie necessarie (sys)
+2) inizializza i dizionari vuoti: users_helpfulness e users_avg_helpfulness 
+3) Per ogni riga in input 
+    3.1) Rimuovi i spazi bianchi della riga
+    3.2) ottieni lo userId e helpfulness splittando la riga
+    3.3) Prova:
+        3.4.1) helpfulness = float(helpfulness)
+        3.4.2) Se userId non è presente in users_helpfulness fai un dizionario che abbia due campi:
+               - somma: inizializalala a 0,
+               - conteggio: inizializala a 0
+     
+    3.4) aggiorna il campo somma della mappa users_helpfulness aggiungendoci il valore helpfulness
+    3.5) aggiorna il campo conteggio della mappa users_helpfulness aggiungendoci 1
+    3.6) Eccezione ValueError:
+        3.6.1) Continua con il prossimo ciclo
+4) Per ogni userId in users_helpfulness:
+    4.1)Prova:
+        4.1.1) Se userId non è presente in users_avg_helpfulness:
+        4.1.2) aggiungi a users_avg_helpfulness per userId la media: dividendo la somma di users_helpfulness per userId  con il conteggio di users_helpfulness per userId
+        
+    4.2) Eccezione ValueError:
+        4.2.1) Continua con il prossimo ciclo
 
-5. Sort the dictionary users_avg_helpfulness based on the "avg"
-   values in descending order and store the
-   result in "sorted_dictionary"
+5) ordina users_avg_helpfulness in base alla media
+6) Stampa gli utenti ordinati in base al loro apprezzamento
 
-6. For each key-value pair in sorted_dictionary:
-    6.a Print the userId (key) and the average
-         helpfulness (value['avg']) separated by a tab

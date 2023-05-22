@@ -1,18 +1,45 @@
 mapper.py:
 
-Read input from standard input.
-For each line of input:
-1. Remove any leading or trailing white spaces.
-2. Split the line by comma to extract columns.
-3. Try :
-    3a. to extract the product ID, timestamp, and text from the columns.
-    3b. trasform time in unix date and keep year,
-    3c. pass product ID and time and text to reduccer.py.
+1) Importa le librerie necessarie (sys, datatime)
 
-reducer.py:
-Initialize an empty dictionary called "dict_years" , "filtered_dict_years_top10", "output_dict" and "sorted_output_dict"
-For each line of input:
-1. Remove any leading or trailing white spaces.
-2. Split the line by tab to extract  product ID, year and text.
-3. try:
-    3a. create a dictinary that has a year how key,product like 
+2) Per ogni riga in input:
+    2.1) Rimuovi gli spazi iniziali e finali dalla riga
+    2.2) Dividi la riga in colonne utilizzando la virgola come separatore
+    2.3) Prova:
+        2.3.1) Assegna a userId il valore della terza colonna
+        2.3.2) Assegna a timestamp il vlaore della sesta colonna
+        2.3.3) Assegna a text il vlaore della settima colonna
+        2.3.4) formatta la data e prendi l'anno
+        2.3.5) passa l'anno, il productId e il timestamp al reducer
+    2.4) Cattura l'eccezione ValueError e continua con il prossimo ciclo
+
+
+Reducer.py:
+1) Importa le librerie necessarie (sys, re e collections)
+2) istanziare  dizionari vuoti: dict_years, filtered_dict_years_top10, output_dict e sorted_output_dict 
+3) per ogni riga in input:
+    3.1) prendi l'anno, product_id e text.
+    3.2) Prova:
+        3.2.1) se l'anno non è in dict_years allora istanzia il dizionario dict_years per anno corrente
+        3.2.2) se il product_id non è in dict_years per anno corrente allora istanzia il dizionario
+        3.2.3) aggiungi text corrente per dict_years per anno corrente e product_id corrente
+    3.3) Cattura l'eccezione ValueError e continua con il prossimo ciclo
+4) Per anno e product_reviews  in dict_years 
+    4.1) effettua un ordinamento per anno con l'array text più grande 
+    4.2) filtra il dizionario così da avere per ogni anno i primi 10 prodotti e memorizzalo in filtered_dict_years_top10
+5) istanzia output_dict 
+6) Per anno, year_dict in filtered_dict_years_top10:
+    6.1) se year non è in output_dict allora istanzia output_dict per anno corrente
+    6.2) Per product_id, product_reviews in year_dict:
+        6.2.1) se product_id non è in output_dict con anno corrente allora istanza  output_dic con anno corrente e product_id
+        6.2.2) chiama counter_word e assegnagni Counter() 
+        6.2.3) Per text in product_reviews:
+                6.2.3.a) pulisci il testo da eventuali caratteri speciali e numeri
+                6.2.3.b) splitta il testo trasformandolo in un array di words
+                6.2.3.c) aggiorna il counter_word con le words
+        6.2.4) ordina le parole in base al loro conteggio e prendi solo le prime 5
+        6.2.5) aggiungi questo risultato al output_dict per anno e prodotto
+7) Per anno in output_dict:
+    7.1) stampa anno e valore basato su anno
+
+
