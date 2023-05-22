@@ -57,13 +57,6 @@ for line in sys.stdin:
 
 # ordinamento dei prodotti per anno e filtraggio dei top 10
 for year, product_reviews in dict_years.items():
-    """
-    product_reviews: {
-        1234: [...],
-        3453: [...]
-        
-    }
-    """
     product_reviews_sorted_list = sorted(product_reviews.items(), key=lambda x: len(x[1]), reverse=True) # [(1234, [...]), (3453, [...])]
     filtered_dict_years_top10[year] = dict(product_reviews_sorted_list[:10])
 

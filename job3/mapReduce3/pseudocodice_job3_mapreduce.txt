@@ -1,0 +1,40 @@
+mapper.py:
+
+1) Importa le librerie necessarie (sys, datatime)
+
+2) Per ogni riga in input:
+    2.1) Rimuovi gli spazi iniziali e finali dalla riga
+    2.2) Dividi la riga in colonne utilizzando la virgola come separatore
+    2.3) Prova:
+        2.3.1) Assegna a userId il valore della seconda colonna
+        2.3.2) Assegna a productId il vlaore della prima colonna
+        2.3.3) Assegna a score  il vlaore della quinta colonna
+        2.3.4) se lo score è maggiore o uguale a 4 allora passa al reducer userId e productId
+        2.3.5) passa l'anno, il productId e il timestamp al reducer
+    2.4) Cattura l'eccezione ValueError e continua con il prossimo ciclo
+
+Reduce.py:
+
+1) Dichiarazione di un dizionari: user_products, active_users, cleaned_tuple
+
+2) Per ogni riga in input:
+    2.1) prendi l'ID utente e l'ID prodotto dalla riga
+    2.2) Prova:
+        2.2.1) Se l'ID utente non è presente in "user_products": aggiungi l'ID utente a "user_products" come chiave con un insieme vuoto come valore
+        2.2.2) Se l'id utente è in user_products per id: aggiungi l'ID prodotto all'insieme corrispondente nell'ID utente di "user_products"
+    2.3) Eccezione di ValueError:
+        2.3.1)Passa alla riga successiva
+
+3) Per ogni utente in "user_products":
+    3.1) Se la lunghezza dell'insieme di prodotti dell'utente è maggiore o uguale a 3:
+        3.1.1) Aggiungi l'utente a "active_users" con l'insieme di prodotti come valore
+
+4) Per ogni combinazione di utenti in "active_users" (tutti gli utenti presi a coppie):
+    4.1) Se l'hash dell'utente 1 è maggiore dell'hash dell'utente 2 e l'intersezione dei loro insiemi di prodotti ha una lunghezza maggiore o uguale a 3:
+        4.1.1) Aggiungi la tupla (utente 1, utente 2, insieme di prodotti in comune) a "cleaned_tuple"
+
+5) Ordina "cleaned_tuple" in base al primo elemento di ogni tupla
+
+6) Per ogni tupla in "cleaned_tuple":
+    6.1) Stampa "id u1: ID utente 1, id u2: ID utente 2, products: prodotto1, prodotto2, ..."
+
